@@ -66,10 +66,10 @@ public class CharacterControl : MonoBehaviour
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
         moveDirection.y = movementDirectionY;
         
-        // if (!characterController.isGrounded)
-        // {
-        //     moveDirection.y -= gravity * Time.deltaTime;
-        // }
+        if (!characterController.isGrounded)
+        {
+            moveDirection.y -= gravity * Time.deltaTime;
+        }
        
         characterController.Move(moveDirection * Time.deltaTime);
 

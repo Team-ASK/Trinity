@@ -4,7 +4,29 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/mainScreen.unity
+    guid: 5e2be15b6cb20584289e40b5d5618eac
+  - enabled: 1
+    path: Assets/Scenes/Night.unity
+    guid: ed9759d16943b3c4c9b04fef17d42936
+  - enabled: 1
+    path: Assets/Scenes/BiRyoRoom.unity
+    guid: c850ee8c3b14cc8459e7e186857cf567
+  - enabled: 1
+    path: Assets/Scenes/controlRoom.unity
+    guid: e6fbfbf2be1cd7b46b9ac5316fd7ae98
+  - enabled: 1
+    path: Assets/Scenes/medicineroom.unity
+    guid: 4da61e88e2d2e8848980a6dacc38efd6
+  - enabled: 1
+    path: Assets/Scenes/GameInitializer.unity
+    guid: 6c91cf6e01363f7408828052a860388c
   m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 1bfa0233d7fd44e4198c82d615c3d5c7,
+      type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000,
+      guid: 2af962fb18c388545ac4502ebd620d39, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
       guid: 90a253edff72ba247bb13adf3134bf01, type: 2}
