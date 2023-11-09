@@ -14,12 +14,23 @@ public class DayTimer : MonoBehaviour
     {
         time = 0.0f;
         counter = GetComponent<TextMeshProUGUI>();
-        StartCoroutine(ExecuteAfterTime(5f));
+        StartCoroutine(ExecuteAfterTime(10f));
     }
     
     IEnumerator ExecuteAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
+        // 다른 스크립트에서 WebSocketClientManager의 인스턴스에 접근
+        WebSocketClientManager webSocketManager = FindObjectOfType<WebSocketClientManager>();
+
+        // WebSocketClientManager의 인스턴스가 존재하는지 확인
+        if (webSocketManager != null) {
+            // SendRoundEnd() 함수 호출
+            webSocketManager.SendRoundEnd();
+        } else {
+            Debug.LogError("WebSocketClientManager not found in the scene.");
+        }
+
         SceneManager.LoadScene("Night");
     }
 

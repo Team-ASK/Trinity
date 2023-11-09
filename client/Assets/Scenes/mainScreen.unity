@@ -1753,6 +1753,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1900839546}
   - component: {fileID: 1900839545}
+  - component: {fileID: 1900839548}
+  - component: {fileID: 1900839547}
   m_Layer: 0
   m_Name: WebSocketManager
   m_TagString: Untagged
@@ -1772,6 +1774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd70163877884549be766802bd473de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ship: {fileID: 0}
 --- !u!4 &1900839546
 Transform:
   m_ObjectHideFlags: 0
@@ -1787,6 +1790,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900839547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900839544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32751b6a8744834aa8d7613c362fae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1900839548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900839544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 103716b0f58bf5d4e92f9a717fb63dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerId: 
+  message: 
+  gameRoomId: 
+  fertilizerAmount: 0
+  eventCode: 0
+  conflictAsteroid: 0
+  roomNo: 0
+  date: 0
+  fertilizerAmountInRoom: 0
+  purifierStatus: 0
+  farmStatus: 0
+  carbonCaptureTryCount: 0
+  fertilizerInput: 0
+  fertilizerProduce: 0
+  fertilizerUpgrade: 0
+  purifierFix: 0
+  co2CollectorFix: 0
+  centralGardenFix: 0
+  taurineProduce: 0
+  asteroidShotDown: 0
+  barrierUpgrade: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

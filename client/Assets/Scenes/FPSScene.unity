@@ -770,8 +770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c37102a5a425c884db6778eb01baa4ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: BlackHole
-  condition: 0
 --- !u!1001 &379873308
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1807,8 +1805,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f708f2f62cf45814898db0e248500e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beaker: {fileID: 723860692}
-  cube: {fileID: 363489859}
 --- !u!136 &694453355
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2272,8 +2268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c37102a5a425c884db6778eb01baa4ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: Asteroids
-  condition: 0
 --- !u!1001 &737182239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2447,9 +2441,9 @@ RectTransform:
   - {fileID: 1020392166}
   m_Father: {fileID: 602189756}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -118}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 131, y: 73}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &796646685
@@ -4287,9 +4281,9 @@ RectTransform:
   - {fileID: 1198185675}
   m_Father: {fileID: 602189756}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -118}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -168, y: 73}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1596671608
