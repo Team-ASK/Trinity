@@ -53,6 +53,7 @@ public class WebSocketClientManager : MonoBehaviour
                 Debug.Log("WebSocket connected");
                 // 연결 후 userId를 서버로 보냅니다.
                 Debug.Log("저장된 userId: " + userId);
+                VariableManager.Instance.playerId = userId;
                 SendUserId(userId);
             };
             webSocket.OnError += (sender, e) => Debug.LogError("WebSocket error: " + e.Message);
@@ -74,7 +75,14 @@ public class WebSocketClientManager : MonoBehaviour
                         UnityMainThreadDispatcher.Enqueue(() =>
                         {
                             // 이 부분에서 메인 스레드에서 실행하고자 하는 작업을 수행
-                            StartCoroutine(ProcessAndLoadScene(receivedMessage));
+                            StartCoroutine(SetFirstDayAndLoadScene(receivedMessage));
+                        });
+                    } else if (type == "nextRound") {
+                        Debug.Log("nextRound 메시지 수신");
+                        UnityMainThreadDispatcher.Enqueue(() =>
+                        {
+                            // 이 부분에서 메인 스레드에서 실행하고자 하는 작업을 수행
+                            VariableManager.Instance.SetNextDayData(receivedMessage);
                         });
                     }
                 }
@@ -87,7 +95,7 @@ public class WebSocketClientManager : MonoBehaviour
         }
     }
 
-    IEnumerator ProcessAndLoadScene(string receivedMessage)
+    IEnumerator SetFirstDayAndLoadScene(string receivedMessage)
     {
         // 메시지 처리
         VariableManager.Instance.SetFirstDayData(receivedMessage);
@@ -115,7 +123,6 @@ public class WebSocketClientManager : MonoBehaviour
         }
     }
 
-
     private void SendUserId(string userId)
     {
         // userId를 서버로 보내는 로직을 구현하세요.
@@ -129,10 +136,10 @@ public class WebSocketClientManager : MonoBehaviour
     public void SendRoundEnd() {
         // 객체 생성과 데이터 채우기
         RoundEndData data = new RoundEndData();
+        data.type = "roundEnd"; // 또는 다른 타입에 맞게 설정
+        data.gameRoomId = VariableManager.Instance.gameRoomId;
 
         if (VariableManager.Instance.roomNo == 1) {
-            data.type = "roundEnd"; // 또는 다른 타입에 맞게 설정
-            data.gameRoomId = VariableManager.Instance.gameRoomId;
             data.roomNum = "first"; // 또는 다른 방 번호에 맞게 설정
 
             // FirstRoomPlayerRequestDto 채우기
@@ -148,8 +155,6 @@ public class WebSocketClientManager : MonoBehaviour
                 purifierTry = VariableManager.Instance.purifierTry
             };
         } else if (VariableManager.Instance.roomNo == 2) {
-            data.type = "roundEnd"; // 또는 다른 타입에 맞게 설정
-            data.gameRoomId = VariableManager.Instance.gameRoomId;
             data.roomNum = "second"; // 또는 다른 방 번호에 맞게 설정
 
             // SecondRoomPlayerRequestDto 채우기
@@ -166,8 +171,6 @@ public class WebSocketClientManager : MonoBehaviour
                 taurineFilterTry = VariableManager.Instance.taurineFilterTry
             };
         } else if (VariableManager.Instance.roomNo == 3) {
-            data.type = "roundEnd"; // 또는 다른 타입에 맞게 설정
-            data.gameRoomId = VariableManager.Instance.gameRoomId;
             data.roomNum = "third"; // 또는 다른 방 번호에 맞게 설정
 
             // ThirdRoomPlayerRequestDto 채우기

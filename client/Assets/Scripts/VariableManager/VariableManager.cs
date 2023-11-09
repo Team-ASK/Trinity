@@ -66,8 +66,7 @@ public class VariableManager : MonoBehaviour
 
     public void SetFirstDayData(string receivedMessage)
     {
-        FirstDay firstDayData = JsonConvert.DeserializeObject<FirstDay>(receivedMessage);
-
+        DayData firstDayData = JsonConvert.DeserializeObject<DayData>(receivedMessage);
         // 여기서 필요한 변수에 데이터 할당
         fertilizerAmount = firstDayData.fertilizerAmount;
         eventCode = firstDayData.eventCode;
@@ -93,32 +92,53 @@ public class VariableManager : MonoBehaviour
             fertilizerAmountInRoom = firstDayData.thirdResponseDto.fertilizerAmount;
             message = firstDayData.thirdResponseDto.message;
         }
-        date = 1;
-        Debug.Log("playerId: " + Instance.playerId);
-        Debug.Log("message: " + Instance.message);
-        Debug.Log("gameRoomId: " + Instance.gameRoomId);
-        Debug.Log("fertilizerAmount: " + Instance.fertilizerAmount);
-        Debug.Log("eventCode: " + Instance.eventCode);
-        Debug.Log("conflictAsteroid: " + Instance.conflictAsteroid);
-        Debug.Log("roomNo: " + Instance.roomNo);
-        Debug.Log("date: " + Instance.date);
-        Debug.Log("fertilizerAmountInRoom: " + Instance.fertilizerAmountInRoom);
-        Debug.Log("purifierStatus: " + Instance.purifierStatus);
-        Debug.Log("farmStatus: " + Instance.farmStatus);
-        Debug.Log("carbonCaptureTryCount: " + Instance.carbonCaptureTryCount);
-        Debug.Log("inputFertilizerTry: " + Instance.inputFertilizerTry);
-        Debug.Log("makeFertilizerTry: " + Instance.makeFertilizerTry);
-        Debug.Log("fertilizerUpgradeTry: " + Instance.fertilizerUpgradeTry);
-        Debug.Log("purifierTry: " + Instance.purifierTry);
-        Debug.Log("taurineFilterTry: " + Instance.taurineFilterTry);
-        Debug.Log("farmTry: " + Instance.farmTry);
-        Debug.Log("asteroidDestroyTry: " + Instance.asteroidDestroyTry);
-        Debug.Log("barrierDevTry: " + Instance.barrierDevTry);
+    }
+
+    public void SetNextDayData(string receivedMessage)
+    {
+        DayData nextDayData = JsonConvert.DeserializeObject<DayData>(receivedMessage);
+        InitializeAction();
+        // 여기서 필요한 변수에 데이터 할당
+        fertilizerAmount = nextDayData.fertilizerAmount;
+        eventCode = nextDayData.eventCode;
+        fertilizerUpgrade = nextDayData.fertilizerUpgrade;
+        barrierUpgrade = nextDayData.barrierUpgrade;
+        conflictAsteroid = nextDayData.conflictAsteroid;
+        gameRoomId = nextDayData.gameRoomId;
+        foodAmount = nextDayData.foodAmount;
+        if (nextDayData.firstResponseDto != null) {
+            roomNo = 1;
+            purifierStatus = nextDayData.firstResponseDto.purifierStatus;
+            fertilizerAmountInRoom = nextDayData.firstResponseDto.fertilizerAmount;
+            message = nextDayData.firstResponseDto.message;
+        } else if (nextDayData.secondResponseDto != null) {
+            roomNo = 2;
+            farmStatus = nextDayData.secondResponseDto.farmStatus;
+            carbonCaptureStatus = nextDayData.secondResponseDto.carbonCaptureStatus;
+            carbonCaptureTryCount = nextDayData.secondResponseDto.carbonCaptureTryCount;
+            fertilizerAmountInRoom = nextDayData.secondResponseDto.fertilizerAmount;
+            message = nextDayData.secondResponseDto.message;
+        } else {
+            roomNo = 3;
+            fertilizerAmountInRoom = nextDayData.thirdResponseDto.fertilizerAmount;
+            message = nextDayData.thirdResponseDto.message;
+        }
+    }
+
+    public void InitializeAction() {
+        inputFertilizerTry = false;
+        makeFertilizerTry = false;
+        fertilizerUpgradeTry = false;
+        purifierTry = false;
+        carbonCaptureTry = false;
+        taurineFilterTry = false;
+        farmTry = false;
+        asteroidDestroyTry = false;
+        barrierDevTry = false;
 
     }
 
-
-    public class FirstDay
+    public class DayData
     {
         // JSON 데이터 구조에 맞게 필드 정의
         public FirstRoom firstResponseDto { get; set; }
