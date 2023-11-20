@@ -116,7 +116,10 @@ public class VariableManager : MonoBehaviour
             message = firstDayData.thirdResponseDto.message;
         }
         date ++;
-       monsterDate = Random.Range(1,13);
+        monsterDate = Random.Range(1,13);
+        if (date == 3) {
+            monsterDate = 1;
+        }
         morningTitleText = date.ToString() + "일차 시작";
         bool overworked = false;
         if ( power < workLimit ) {

@@ -18,7 +18,7 @@ public class WebSocketClientManager : MonoBehaviour
     public GameObject scorePanel;
     public GameObject Panel;
     public GameObject scoreIcon;
-    private readonly string apiUrl = "https://k9b308.p.ssafy.io/api/game/match/"; // 대상 URL로 바꾸세요.
+    private readonly string apiUrl = "https://k9b308.p.ssafy.io/api/game/cheat/match/"; // 대상 URL로 바꾸세요.
 
     GameObject canvas;
     void Awake(){

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class VariableInitializer : MonoBehaviour
@@ -34,13 +35,13 @@ public class VariableInitializer : MonoBehaviour
         }
         VariableManager.Instance.morningEvent = 0;
         int code = VariableManager.Instance.eventCode;
-        if ( code%2 == 1 ) {
+        if ( code%2 == 1 || VariableManager.Instance.date == 2 ) {
             VariableManager.Instance.asteroidStatus = true;
         } else {
             VariableManager.Instance.asteroidStatus = false;
         }  // 이벤트 코드 1 : 소행성 출현
         code /= 2;
-        if ( code%2 == 1 ) {
+        if ( code%2 == 1 || VariableManager.Instance.date == 2 ) {
             VariableManager.Instance.blackHoleObserved = true;
         } else {
             VariableManager.Instance.blackHoleObserved = false;
