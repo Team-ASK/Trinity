@@ -34,6 +34,17 @@ public class GameConnectController {
         }
     }
 
+    @GetMapping("/cheat/match/{userId}")
+    public ResponseEntity<?> cheatMatchMaking(@Validated @PathVariable String userId) {
+        boolean result = gameConnectService.cheatMatchMaking(userId);
+        if(result) return ResponseEntity.ok().build();
+        else {
+            return ResponseEntity.badRequest().body("MatchingFail");
+        }
+    }
+
+
+
     @PostMapping("/players")
     public ResponseEntity<?> takePlayer(@Validated @RequestBody List<PlayerDto> players) {
         if(gameConnectService.checkUserStatus(players)) {
