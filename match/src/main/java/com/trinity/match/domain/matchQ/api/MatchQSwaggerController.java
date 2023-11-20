@@ -9,4 +9,7 @@ public interface MatchQSwaggerController {
 
     @GetMapping("/join/{userId}")
     ResponseEntity<?> joinQueue(@Validated @PathVariable String userId);
+
+    @GetMapping("/cheat/join/{userId}")
+    ResponseEntity<?> cheatJoinQueue(@Validated @PathVariable String userId);
 }

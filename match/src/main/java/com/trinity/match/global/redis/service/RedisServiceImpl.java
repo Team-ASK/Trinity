@@ -19,17 +19,22 @@ public class RedisServiceImpl implements RedisService {
     private final RedisTemplate<String, String> matchRedisTemplate;
     @Qualifier("gameRedisTemplate")
     private final RedisTemplate<String, String> gameRedisTemplate;
+    @Qualifier("cheatRedisTemplate")
+    private final RedisTemplate<String, String> cheatRedisTemplate;
 
     private ZSetOperations<String, String> matchOperations;
+    private ZSetOperations<String, String> cheatOperations;
     private HashOperations<String, String, String> gameOperations;
 
     @PostConstruct
     private void init() {
         matchOperations = matchRedisTemplate.opsForZSet();
         gameOperations = gameRedisTemplate.opsForHash();
+        cheatOperations = cheatRedisTemplate.opsForZSet();
     }
 
     private static final String MATCH_QUEUE = "matchQueue";
+    private static final String CHEAT_QUEUE = "cheatQueue";
 
     @Override
     public boolean addUser(String userId) {
@@ -38,20 +43,31 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public boolean addCheatUser(String userId) {
+        double time = System.currentTimeMillis();
+        return cheatOperations.add(CHEAT_QUEUE, userId, time);
+    }
+
+    @Override
     public void recoverList(List<Pair<String, Double>> waitingList) {
         for (Pair<String, Double> userAndScore : waitingList) {
-            matchOperations.add("matchQueue", userAndScore.getFirst(), userAndScore.getSecond());
+            matchOperations.add(MATCH_QUEUE, userAndScore.getFirst(), userAndScore.getSecond());
         }
     }
 
     @Override
     public void deleteData(String key) {
-        matchOperations.remove("matchQueue", key);
+        matchOperations.remove(MATCH_QUEUE, key);
     }
 
     @Override
     public long getSize() {
-        return matchOperations.size("matchQueue");
+        return matchOperations.size(MATCH_QUEUE);
+    }
+
+    @Override
+    public long getCheatSize() {
+        return cheatOperations.size(CHEAT_QUEUE);
     }
 
     @Override
@@ -61,6 +77,6 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Set<ZSetOperations.TypedTuple<String>> getSet() {
-        return matchOperations.rangeWithScores("matchQueue", 0, 0);
+        return matchOperations.rangeWithScores(MATCH_QUEUE, 0, 0);
     }
 }

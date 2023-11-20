@@ -33,4 +33,17 @@ public class WebClientService {
                         }
                 ); // 비동기 처리를 위해 subscribe() 호출;
     }
+
+    public void postCheat(List<GameServerPlayerListRequestDto> playerList) {
+        webClientConfig.webClient()
+                .post()
+                .uri("/players")
+                .body(BodyInserters.fromValue(playerList))
+                .retrieve()
+                .bodyToMono(String.class) // 반환되는 응답의 타입. 필요에 따라 변경
+                .subscribe(
+                        response -> log.info(response),
+                        error -> log.error(error.getMessage())
+                ); // 비동기 처리를 위해 subscribe() 호출;
+    }
 }

@@ -1,7 +1,7 @@
 package com.trinity.match.domain.matchQ.service;
 
 import com.trinity.match.domain.matchQ.dto.request.GameServerPlayerListRequestDto;
-import com.trinity.match.global.redis.service.RedisServiceImpl;
+import com.trinity.match.global.redis.service.RedisService;
 import com.trinity.match.global.webClient.WebClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,20 +12,20 @@ import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchQServiceImpl implements MatchQService {
 
-    private final RedisServiceImpl redisService;
+    private final RedisService redisService;
     private final RedissonClient matchRedissonClient;
     private final WebClientService webClientService;
 
     private static final String LOCK_NAME = "matchQueueLock";
+
+    static Queue<String> cheatQ = new ArrayDeque<>();
 
     @Override
     public boolean joinQueue(String userId) {
@@ -39,6 +39,33 @@ public class MatchQServiceImpl implements MatchQService {
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public boolean cheatJoinQueue(String userId) {
+        RLock lock = matchRedissonClient.getLock(LOCK_NAME);
+        lock.lock();
+        try {
+            redisService.addCheatUser(userId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        } finally {
+            lock.unlock();
+        }
+
+        if (cheatQ.size() == 3) {
+            List<GameServerPlayerListRequestDto> playerList = new ArrayList<>();
+            for (String q : cheatQ) {
+                playerList.add(GameServerPlayerListRequestDto.builder()
+                        .userId(q)
+                        .build());
+            }
+
+            webClientService.postCheat(playerList);
+        }
+
+        return true;
     }
 
     @Scheduled(fixedRate = 2000)
