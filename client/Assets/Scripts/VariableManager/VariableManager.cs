@@ -119,6 +119,8 @@ public class VariableManager : MonoBehaviour
         monsterDate = Random.Range(1,13);
         if (date == 3) {
             monsterDate = 1;
+        } else if ( date < 3) {
+            monsterDate = 12;
         }
         morningTitleText = date.ToString() + "일차 시작";
         bool overworked = false;
