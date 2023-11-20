@@ -46,6 +46,14 @@ public class GameConnectServiceImpl implements GameConnectService {
     }
 
     @Override
+    public boolean cheatMatchMaking(String userId) {
+        if(redisService.getData(userId) == null) return false;
+        redisService.saveData(userId, String.valueOf(UserStatus.WAITING));
+        webClientService.getCheat(userId);
+        return true;
+    }
+
+    @Override
     public boolean checkUserStatus(List<PlayerDto> players) {
         for(PlayerDto p : players) {
             if(!redisService.getData(p.getUserId()).equals("WAITING")) return false;
