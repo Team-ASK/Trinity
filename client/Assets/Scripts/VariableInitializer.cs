@@ -47,17 +47,17 @@ public class VariableInitializer : MonoBehaviour
             VariableManager.Instance.blackHoleObserved = false;
         }  // 이벤트 코드 2 : 블랙홀 출현
         code /= 2;
-        if ( code%2 == 1 ) {
-            VariableManager.Instance.workLimit = 0;
-            VariableManager.Instance.morningEvent += 2;
-        }  // 이벤트 코드 4 : 트리니티 호의 생일 (과로 면역)
+        // if ( code%2 == 1 ) {
+        //     VariableManager.Instance.workLimit = 0;
+        //     VariableManager.Instance.morningEvent += 2;
+        // }  // 이벤트 코드 4 : 트리니티 호의 생일 (과로 면역)
         code /= 2;
-        if ( code%2 == 1 ) {
-            if (VariableManager.Instance.power > 0) {
-                VariableManager.Instance.power --;
-            }
-            VariableManager.Instance.morningEvent ++;
-        }  // 이벤트 코드 8 : 우주 멀미 (가능한 행동 카운트 -1)
+        // if ( code%2 == 1 ) {
+        //     if (VariableManager.Instance.power > 0) {
+        //         VariableManager.Instance.power --;
+        //     }
+        //     VariableManager.Instance.morningEvent ++;
+        // }  // 이벤트 코드 8 : 우주 멀미 (가능한 행동 카운트 -1)
         code /= 2;
         if ( code%2 == 1 ) {
             VariableManager.Instance.purifierStatus = true;

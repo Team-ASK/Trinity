@@ -131,12 +131,12 @@ public class VariableManager : MonoBehaviour
             morningContextText = "";
         }
         if ( !overworked ) {
-            if ( eventCode / 4 % 2 == 1) {
-                morningContextText += "오늘은 트리니티 호의 생일입니다.\n과로 페널티 없이 최대치의 행동을 할 수 있습니다.\n";
-            }
-            if ( eventCode / 8 % 2 == 1) {
-                morningContextText += "당신은 우주 멀미에 빠졌습니다.\n최대 행동 가능 횟수가 1 줄어듭니다.\n";
-            }
+            // if ( eventCode / 4 % 2 == 1) {
+            //     morningContextText += "오늘은 트리니티 호의 생일입니다.\n과로 페널티 없이 최대치의 행동을 할 수 있습니다.\n";
+            // }
+            // if ( eventCode / 8 % 2 == 1) {
+            //     morningContextText += "당신은 우주 멀미에 빠졌습니다.\n최대 행동 가능 횟수가 1 줄어듭니다.\n";
+            // }
         }
         if ( date == 10 ) {
             morningContextText += "우주선에 비축해둔 비상식량을 발견했습니다.\n보유 식량 수가 1 증가합니다.\n";
