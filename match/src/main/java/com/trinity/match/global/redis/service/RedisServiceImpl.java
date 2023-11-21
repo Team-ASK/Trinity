@@ -56,8 +56,20 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public void recoverCheatList(List<Pair<String, Double>> waitingList) {
+        for (Pair<String, Double> userAndScore : waitingList) {
+            cheatOperations.add(CHEAT_QUEUE, userAndScore.getFirst(), userAndScore.getSecond());
+        }
+    }
+
+    @Override
     public void deleteData(String key) {
         matchOperations.remove(MATCH_QUEUE, key);
+    }
+
+    @Override
+    public void deleteCheatData(String key) {
+        cheatOperations.remove(CHEAT_QUEUE, key);
     }
 
     @Override
@@ -78,5 +90,10 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Set<ZSetOperations.TypedTuple<String>> getSet() {
         return matchOperations.rangeWithScores(MATCH_QUEUE, 0, 0);
+    }
+
+    @Override
+    public Set<ZSetOperations.TypedTuple<String>> getCheatSet() {
+        return matchOperations.rangeWithScores(CHEAT_QUEUE, 0, 0);
     }
 }
