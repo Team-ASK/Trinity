@@ -1,7 +1,8 @@
-package com.trinity.match.global.webClient;
+package com.trinity.match.demo.webClient;
 
+import com.trinity.match.demo.redis.CheatRedisService;
 import com.trinity.match.domain.matchQ.dto.request.GameServerPlayerListRequestDto;
-import com.trinity.match.global.redis.service.RedisService;
+import com.trinity.match.global.webClient.WebClientConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
@@ -13,12 +14,11 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class WebClientService {
-
+public class CheatWebClientService {
     private final WebClientConfig webClientConfig;
-    private final RedisService redisService;
+    private final CheatRedisService cheatRedisService;
 
-    public void post(List<GameServerPlayerListRequestDto> playerList, List<Pair<String, Double>> waitingList) {
+    public void postCheat(List<GameServerPlayerListRequestDto> playerList, List<Pair<String, Double>> waitingList) {
         webClientConfig.webClient()
                 .post()
                 .uri("/players")
@@ -28,7 +28,7 @@ public class WebClientService {
                 .subscribe(
                         response -> log.info(response),
                         error -> {
-                        redisService.recoverList(waitingList);
+                            cheatRedisService.recoverList(waitingList);
                             log.error(error.getMessage());
                         }
                 ); // 비동기 처리를 위해 subscribe() 호출;

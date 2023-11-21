@@ -1,4 +1,4 @@
-package com.trinity.match.global.redis.service;
+package com.trinity.match.demo.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,44 +14,40 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class RedisServiceImpl implements RedisService {
-    @Qualifier("matchRedisTemplate")
-    private final RedisTemplate<String, String> matchRedisTemplate;
+public class CheatRedisServiceImpl implements CheatRedisService {
+
+    @Qualifier("cheatRedisTemplate")
+    private final RedisTemplate<String, String> cheatRedisTemplate;
     @Qualifier("gameRedisTemplate")
     private final RedisTemplate<String, String> gameRedisTemplate;
 
-    private ZSetOperations<String, String> matchOperations;
+    private ZSetOperations<String, String> cheatOperations;
     private HashOperations<String, String, String> gameOperations;
+
+    private static final String CHEAT_QUEUE = "cheatQueue";
 
     @PostConstruct
     private void init() {
-        matchOperations = matchRedisTemplate.opsForZSet();
+        cheatOperations = cheatRedisTemplate.opsForZSet();
         gameOperations = gameRedisTemplate.opsForHash();
     }
-
-    private static final String MATCH_QUEUE = "matchQueue";
 
     @Override
     public boolean addUser(String userId) {
         double time = System.currentTimeMillis();
-        return matchOperations.add(MATCH_QUEUE, userId, time);
+        return cheatOperations.add(CHEAT_QUEUE, userId, time);
     }
 
     @Override
     public void recoverList(List<Pair<String, Double>> waitingList) {
         for (Pair<String, Double> userAndScore : waitingList) {
-            matchOperations.add(MATCH_QUEUE, userAndScore.getFirst(), userAndScore.getSecond());
+            cheatOperations.add(CHEAT_QUEUE, userAndScore.getFirst(), userAndScore.getSecond());
         }
     }
 
     @Override
     public void deleteData(String key) {
-        matchOperations.remove(MATCH_QUEUE, key);
-    }
-
-    @Override
-    public long getSize() {
-        return matchOperations.size(MATCH_QUEUE);
+        cheatOperations.remove(CHEAT_QUEUE, key);
     }
 
     @Override
@@ -59,8 +55,14 @@ public class RedisServiceImpl implements RedisService {
         return gameOperations.get("connectingMember", findUserId);
     }
 
+
+    @Override
+    public long getSize() {
+        return cheatOperations.size(CHEAT_QUEUE);
+    }
+
     @Override
     public Set<ZSetOperations.TypedTuple<String>> getSet() {
-        return matchOperations.rangeWithScores(MATCH_QUEUE, 0, 0);
+        return cheatOperations.rangeWithScores(CHEAT_QUEUE, 0, 0);
     }
 }
