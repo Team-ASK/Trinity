@@ -11,9 +11,12 @@ public interface RedisService {
     boolean addUser(String userId);
     boolean addCheatUser(String userId);
     void recoverList(List<Pair<String, Double>> waitingList);
+    void recoverCheatList(List<Pair<String, Double>> waitingList);
     void deleteData(String key);
+    void deleteCheatData(String key);
     long getSize();
     long getCheatSize();
     Object validate(String findUserId);
     Set<ZSetOperations.TypedTuple<String>> getSet();
+    Set<ZSetOperations.TypedTuple<String>> getCheatSet();
 }

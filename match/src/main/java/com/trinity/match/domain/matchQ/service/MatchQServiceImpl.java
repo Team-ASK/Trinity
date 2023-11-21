@@ -24,8 +24,7 @@ public class MatchQServiceImpl implements MatchQService {
     private final WebClientService webClientService;
 
     private static final String LOCK_NAME = "matchQueueLock";
-
-    static Queue<String> cheatQ = new ArrayDeque<>();
+    private static final String CHEAT_LOCK_NAME = "cheatQueueLock";
 
     @Override
     public boolean joinQueue(String userId) {
@@ -43,34 +42,76 @@ public class MatchQServiceImpl implements MatchQService {
 
     @Override
     public boolean cheatJoinQueue(String userId) {
-        RLock lock = matchRedissonClient.getLock(LOCK_NAME);
+        RLock lock = matchRedissonClient.getLock(CHEAT_LOCK_NAME);
         lock.lock();
         try {
             redisService.addCheatUser(userId);
+            return true;
         } catch (Exception e) {
             log.error(e.getMessage());
             return false;
         } finally {
             lock.unlock();
         }
-
-        if (cheatQ.size() == 3) {
-            List<GameServerPlayerListRequestDto> playerList = new ArrayList<>();
-            for (String q : cheatQ) {
-                playerList.add(GameServerPlayerListRequestDto.builder()
-                        .userId(q)
-                        .build());
-            }
-
-            webClientService.postCheat(playerList);
-        }
-
-        return true;
     }
 
     @Scheduled(fixedRate = 2000)
     private void checkQueueSize() {
         RLock lock = matchRedissonClient.getLock(LOCK_NAME);
+        lock.lock();
+        List<Pair<String, Double>> waitingList = new ArrayList<>();
+        try {
+            // 대기 큐의 크기가 3 보다 작으면 그만
+            if (redisService.getCheatSize() < 3) return;
+
+            while (waitingList.size() != 3) {
+                // 1순위 사람 뽑기
+                Set<ZSetOperations.TypedTuple<String>> rangeWithScores = redisService.getCheatSet();
+                if (rangeWithScores == null || rangeWithScores.isEmpty()) break;
+
+                ZSetOperations.TypedTuple<String> next = rangeWithScores.iterator().next();
+                String findUserId = next.getValue();
+                Double score = next.getScore();
+
+                // 게임 서버 redis에 접근해 유효성 검사
+                Object state = redisService.validate(findUserId);
+
+                if (state != null && state.toString().equals("WAITING")) {
+                    waitingList.add(Pair.of(findUserId, score));
+                }
+                redisService.deleteCheatData(findUserId);
+            }
+
+            // 게임 서버에 보낼 리스트의 크기가 3보다 작으면 다시 대기큐에 넣고 돌아가기
+            if (waitingList.size() < 3) {
+                redisService.recoverCheatList(waitingList);
+                return;
+            }
+
+            for (Pair<String, Double> userAndScore : waitingList) {
+                redisService.deleteCheatData(userAndScore.getFirst());
+            }
+
+            List<GameServerPlayerListRequestDto> playerList = new ArrayList<>();
+            for (Pair<String, Double> userAndScore : waitingList)
+                playerList.add(GameServerPlayerListRequestDto.builder()
+                        .userId(userAndScore.getFirst())
+                        .build());
+
+            webClientService.postCheat(playerList, waitingList);
+
+        } catch (Exception e) {
+            // 에러 발생하면 에러 메시지 찍고 대기 큐에 다시 넣기
+            log.error(e.getMessage());
+            redisService.recoverList(waitingList);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Scheduled(fixedRate = 2000)
+    private void checkCheatQueueSize() {
+        RLock lock = matchRedissonClient.getLock(CHEAT_LOCK_NAME);
         lock.lock();
         List<Pair<String, Double>> waitingList = new ArrayList<>();
         try {
