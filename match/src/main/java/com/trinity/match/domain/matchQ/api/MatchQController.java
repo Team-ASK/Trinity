@@ -24,7 +24,7 @@ public class MatchQController implements MatchQSwaggerController {
 
     @Override
     public ResponseEntity<?> cheatJoinQueue(String userId) {
-        if (matchQService.joinQueue(userId)) {
+        if (matchQService.cheatJoinQueue(userId)) {
             return ResponseEntity.ok().body("success");
         } else {
             return ResponseEntity.badRequest().body("fail");
