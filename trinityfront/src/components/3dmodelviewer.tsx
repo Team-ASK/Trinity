@@ -11,6 +11,7 @@ interface ModelViewerProps {
 
 const ModelViewer: React.FC<ModelViewerProps> = ({ modelPath, fileType }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const modelRef = useRef<THREE.Object3D | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -42,7 +43,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelPath, fileType }) => {
         scene.add(model);
 
         // 모델의 크기와 위치 조절 (예시)
-        model.scale.set(0.0005, 0.0005, 0.0005);
+        model.scale.set(0.0003, 0.0003, 0.0003);
         model.position.set(0, 0, 0);
       });
     } else if (fileType === 'gltf') {
@@ -62,9 +63,16 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ modelPath, fileType }) => {
 
       // 모델이 로드된 후에만 회전 조절
       if (model) {
-        model.rotation.y += 0.0009;
-        model.rotation.z += 0.0009;
-        model.rotation.x += 0.0009;
+        model.rotation.y += 0.001;
+        model.rotation.z += 0.001;
+        model.rotation.x += 0.001;
+      }
+
+      // 모델이 스스로 이동하는 로직
+      if (modelRef.current) {
+        // 여기에서 모델의 위치를 조절합니다.
+        modelRef.current.position.x += 10;
+        modelRef.current.rotation.y += 10;
       }
 
       renderer.render(scene, camera);
